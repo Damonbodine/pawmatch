@@ -70,7 +70,7 @@ export const listByApplication = query({
   args: { applicationId: v.id("applications") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return [];
 
     const messages = await ctx.db
       .query("messages")

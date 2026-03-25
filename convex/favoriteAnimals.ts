@@ -38,7 +38,7 @@ export const listByUser = query({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return [];
 
     const currentUser = await ctx.db
       .query("users")

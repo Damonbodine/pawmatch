@@ -41,48 +41,52 @@ export function FavoritesGrid() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {favorites.map((animal: any) => (
-        <Card key={animal._id} className="overflow-hidden group hover:shadow-lg transition-shadow border-border">
-          <Link href={`/animals/${animal._id}`}>
-            <div className="relative h-48 bg-muted overflow-hidden">
-              {animal.imageUrl ? (
-                <img
-                  src={animal.imageUrl}
-                  alt={animal.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full text-muted-foreground">No Photo</div>
-              )}
-              <Badge className="absolute top-2 right-2 bg-secondary text-secondary-foreground">
-                {animal.status}
-              </Badge>
-            </div>
-          </Link>
-          <CardContent className="p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-semibold text-foreground">{animal.name}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {animal.species} &middot; {animal.breed}
-                </p>
+      {favorites.map((fav: any) => {
+        const animal = fav.animal;
+        if (!animal) return null;
+        return (
+          <Card key={fav._id} className="overflow-hidden group hover:shadow-lg transition-shadow border-border">
+            <Link href={`/animals/${animal._id}`}>
+              <div className="relative h-48 bg-muted overflow-hidden">
+                {animal.photoUrl ? (
+                  <img
+                    src={animal.photoUrl}
+                    alt={animal.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-muted-foreground">No Photo</div>
+                )}
+                <Badge className="absolute top-2 right-2 bg-secondary text-secondary-foreground">
+                  {animal.status}
+                </Badge>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => toggleFavorite({ animalId: animal._id })}
-              >
-                <Heart className="h-5 w-5 fill-primary text-primary" />
-              </Button>
-            </div>
-          </CardContent>
-          <CardFooter className="px-4 pb-4 pt-0">
-            <span className="text-sm font-medium text-primary">
-              {animal.adoptionFee ? `$${animal.adoptionFee}` : "Fee TBD"}
-            </span>
-          </CardFooter>
-        </Card>
-      ))}
+            </Link>
+            <CardContent className="p-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="font-semibold text-foreground">{animal.name}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {animal.species} &middot; {animal.breed}
+                  </p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => toggleFavorite({ animalId: animal._id })}
+                >
+                  <Heart className="h-5 w-5 fill-primary text-primary" />
+                </Button>
+              </div>
+            </CardContent>
+            <CardFooter className="px-4 pb-4 pt-0">
+              <span className="text-sm font-medium text-primary">
+                {animal.adoptionFee ? `$${animal.adoptionFee}` : "Fee TBD"}
+              </span>
+            </CardFooter>
+          </Card>
+        );
+      })}
     </div>
   );
 }

@@ -15,8 +15,10 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
-import { Home, PawPrint, FileText, Heart, Bell, Building2, Settings, Users, MessageSquare } from "lucide-react";
+import { Home, PawPrint, FileText, Heart, Bell, Building2, Settings, Users, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useClerk } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 
 interface NavItem {
   label: string;
@@ -28,8 +30,8 @@ interface NavItem {
 
 export function NavSidebar() {
   const { user: clerkUser } = useUser();
+  const { signOut } = useClerk();
   const currentUser = useQuery(api.users.getCurrentUser);
-  const unreadMessages = useQuery(api.messages.getUnreadCount);
   const pathname = usePathname();
 
   const role = currentUser?.role ?? "adopter";
@@ -37,11 +39,11 @@ export function NavSidebar() {
   const navItems: NavItem[] = [
     { label: "Dashboard", href: "/dashboard", icon: Home },
     { label: "Animals", href: "/animals", icon: PawPrint },
-    { label: "Applications", href: "/applications", icon: FileText },
-    { label: "Favorites", href: "/favorites", icon: Heart, roles: ["adopter"] },
-    { label: "Messages", href: "/messages", icon: MessageSquare, badgeCount: unreadMessages ?? 0 },
-    { label: "Shelters", href: "/shelters", icon: Building2, roles: ["admin", "staff"] },
-    { label: "Users", href: "/users", icon: Users, roles: ["admin"] },
+    { label: "My Applications", href: "/my-applications", icon: FileText, roles: ["Adopter"] },
+    { label: "Review Applications", href: "/review-applications", icon: FileText, roles: ["Admin", "ShelterStaff"] },
+    { label: "Favorites", href: "/favorites", icon: Heart, roles: ["Adopter"] },
+    { label: "Shelters", href: "/shelters", icon: Building2, roles: ["Admin", "ShelterStaff"] },
+    { label: "Users", href: "/users", icon: Users, roles: ["Admin"] },
     { label: "Notifications", href: "/notifications", icon: Bell },
     { label: "Settings", href: "/settings", icon: Settings },
   ];
@@ -89,6 +91,15 @@ export function NavSidebar() {
             </p>
             <p className="text-xs text-muted-foreground capitalize">{role}</p>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+            onClick={() => signOut({ redirectUrl: "/" })}
+            title="Sign out"
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
         </div>
       </SidebarFooter>
     </Sidebar>

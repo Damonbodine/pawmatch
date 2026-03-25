@@ -42,6 +42,30 @@ export const getOrCreateUser = mutation({
   },
 });
 
+export const createFromClerk = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const existing = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+    if (existing) return existing._id;
+
+    return await ctx.db.insert("users", {
+      clerkId: identity.subject,
+      name: identity.name ?? "User",
+      email: identity.email ?? "",
+      role: "Adopter",
+      isActive: true,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+  },
+});
+
 export const getCurrentUser = query({
   args: {},
   handler: async (ctx) => {
@@ -61,7 +85,7 @@ export const getById = query({
   args: { userId: v.id("users") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return null;
 
     return await ctx.db.get(args.userId);
   },
@@ -73,14 +97,14 @@ export const list = query({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return [];
 
     const currentUser = await ctx.db
       .query("users")
       .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
       .first();
     if (!currentUser || currentUser.role !== "Admin") {
-      throw new Error("Forbidden: Admin access required");
+      return [];
     }
 
     if (args.role) {

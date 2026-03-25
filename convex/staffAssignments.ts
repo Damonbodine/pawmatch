@@ -67,7 +67,7 @@ export const listByShelter = query({
   args: { shelterId: v.id("shelters") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return [];
 
     const assignments = await ctx.db
       .query("staffAssignments")
@@ -87,7 +87,7 @@ export const listByUser = query({
   args: { userId: v.id("users") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return [];
 
     const assignments = await ctx.db
       .query("staffAssignments")

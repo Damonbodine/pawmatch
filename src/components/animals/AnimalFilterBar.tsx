@@ -40,10 +40,10 @@ export function AnimalFilterBar({ filters, onFiltersChange }: AnimalFilterBarPro
     <div className="flex flex-wrap items-center gap-3 p-4 bg-card rounded-lg border border-border">
       <Select
         value={filters.species ?? "all"}
-        onValueChange={(v: string | null) => updateFilter("species", v ?? undefined)}
+        onValueChange={(v) => updateFilter("species", v ?? undefined)}
       >
         <SelectTrigger className="w-[140px]">
-          <SelectValue placeholder="Species" />
+          <SelectValue placeholder="All Species" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Species</SelectItem>
@@ -57,10 +57,10 @@ export function AnimalFilterBar({ filters, onFiltersChange }: AnimalFilterBarPro
 
       <Select
         value={filters.size ?? "all"}
-        onValueChange={(v: string | null) => updateFilter("size", v ?? undefined)}
+        onValueChange={(v) => updateFilter("size", v ?? undefined)}
       >
         <SelectTrigger className="w-[140px]">
-          <SelectValue placeholder="Size" />
+          <SelectValue placeholder="All Sizes" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Sizes</SelectItem>
@@ -72,10 +72,10 @@ export function AnimalFilterBar({ filters, onFiltersChange }: AnimalFilterBarPro
 
       <Select
         value={filters.shelterId ?? "all"}
-        onValueChange={(v: string | null) => updateFilter("shelterId", v ?? undefined)}
+        onValueChange={(v) => updateFilter("shelterId", v ?? undefined)}
       >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Shelter" />
+          <SelectValue placeholder="All Shelters" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Shelters</SelectItem>

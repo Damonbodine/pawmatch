@@ -99,7 +99,7 @@ export const getById = query({
   args: { applicationId: v.id("applications") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return null;
 
     const application = await ctx.db.get(args.applicationId);
     if (!application) return null;
@@ -119,7 +119,7 @@ export const listByAnimal = query({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return [];
 
     const applications = await ctx.db
       .query("applications")
@@ -147,13 +147,13 @@ export const listByUser = query({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return [];
 
     const currentUser = await ctx.db
       .query("users")
       .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
       .first();
-    if (!currentUser) throw new Error("Not authenticated");
+    if (!currentUser) return [];
 
     const targetUserId = args.userId ?? currentUser._id;
 
@@ -183,7 +183,7 @@ export const listByStatus = query({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return [];
 
     const applications = await ctx.db
       .query("applications")

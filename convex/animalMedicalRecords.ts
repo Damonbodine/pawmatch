@@ -50,7 +50,7 @@ export const listByAnimal = query({
   args: { animalId: v.id("animals") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return [];
 
     return await ctx.db
       .query("animalMedicalRecords")

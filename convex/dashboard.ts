@@ -5,14 +5,14 @@ export const adminStats = query({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return null;
 
     const currentUser = await ctx.db
       .query("users")
       .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
       .first();
     if (!currentUser || currentUser.role !== "Admin") {
-      throw new Error("Forbidden: Admin access required");
+      return null;
     }
 
     const allAnimals = await ctx.db.query("animals").collect();
@@ -59,7 +59,7 @@ export const shelterStats = query({
   args: { shelterId: v.id("shelters") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return null;
 
     const shelter = await ctx.db.get(args.shelterId);
     if (!shelter) throw new Error("Shelter not found");
@@ -108,13 +108,13 @@ export const adopterStats = query({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return null;
 
     const currentUser = await ctx.db
       .query("users")
       .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
       .first();
-    if (!currentUser) throw new Error("Not authenticated");
+    if (!currentUser) return null;
 
     const applications = await ctx.db
       .query("applications")

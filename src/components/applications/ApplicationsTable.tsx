@@ -13,6 +13,7 @@ interface ApplicationsTableProps {
   userId?: Id<"users">;
   animalId?: Id<"animals">;
   status?: "Submitted" | "UnderReview" | "Approved" | "Rejected" | "Withdrawn";
+  basePath?: string;
 }
 
 const statusColors: Record<string, string> = {
@@ -23,7 +24,7 @@ const statusColors: Record<string, string> = {
   Withdrawn: "bg-muted text-muted-foreground",
 };
 
-export function ApplicationsTable({ userId, status }: ApplicationsTableProps) {
+export function ApplicationsTable({ userId, status, basePath = "/my-applications" }: ApplicationsTableProps) {
   const applications = userId
     ? useQuery(api.applications.listByUser, { userId, status })
     : useQuery(api.applications.listByStatus, { status: status ?? "Submitted" });
@@ -57,10 +58,10 @@ export function ApplicationsTable({ userId, status }: ApplicationsTableProps) {
         {applications.map((app: any) => (
           <TableRow key={app._id}>
             <TableCell className="font-medium text-foreground">
-              {app.animalName ?? "Unknown"}
+              {app.animal?.name ?? app.animalName ?? "Unknown"}
             </TableCell>
             <TableCell className="text-muted-foreground">
-              {app.applicantName ?? "Unknown"}
+              {app.applicant?.name ?? app.applicantName ?? "Unknown"}
             </TableCell>
             <TableCell className="text-muted-foreground">
               {new Date(app._creationTime).toLocaleDateString()}
@@ -69,7 +70,9 @@ export function ApplicationsTable({ userId, status }: ApplicationsTableProps) {
               <Badge className={statusColors[app.status] ?? ""}>{app.status}</Badge>
             </TableCell>
             <TableCell className="text-right">
-              <Link href={`/applications/${app._id}`} className={buttonVariants({ variant: "ghost", size: "sm" })}>Review</Link>
+              <Link href={`${basePath}/${app._id}`} className={buttonVariants({ variant: "ghost", size: "sm" })}>
+                {basePath.includes("review") ? "Review" : "View"}
+              </Link>
             </TableCell>
           </TableRow>
         ))}

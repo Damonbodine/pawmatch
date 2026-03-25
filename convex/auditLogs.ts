@@ -9,14 +9,14 @@ export const list = query({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) return [];
 
     const currentUser = await ctx.db
       .query("users")
       .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
       .first();
     if (!currentUser || currentUser.role !== "Admin") {
-      throw new Error("Forbidden: Admin access required");
+      return [];
     }
 
     const takeLimit = args.limit ?? 100;
