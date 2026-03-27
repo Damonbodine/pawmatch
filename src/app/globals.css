@@ -4,74 +4,74 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: 39 100% 97%;
-  --foreground: 24 10% 10%;
+  --background: 220 14% 96%;
+  --foreground: 220 40% 10%;
   --card: 0 0% 100%;
-  --card-foreground: 24 10% 10%;
+  --card-foreground: 220 40% 10%;
   --popover: 0 0% 100%;
-  --popover-foreground: 24 10% 10%;
-  --primary: 25 95% 53%;
+  --popover-foreground: 220 40% 10%;
+  --primary: 25 80% 55%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 168 76% 40%;
-  --secondary-foreground: 0 0% 100%;
-  --muted: 30 100% 85%;
-  --muted-foreground: 24 6% 45%;
-  --accent: 166 76% 92%;
-  --accent-foreground: 168 76% 25%;
-  --destructive: 0 84% 60%;
+  --secondary: 220 14% 90%;
+  --secondary-foreground: 220 40% 10%;
+  --muted: 220 14% 92%;
+  --muted-foreground: 220 10% 45%;
+  --accent: 220 14% 90%;
+  --accent-foreground: 220 40% 10%;
+  --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 100%;
-  --border: 30 95% 72%;
-  --input: 30 100% 85%;
-  --ring: 25 95% 53%;
-  --radius: 0.75rem;
-  --chart-1: 25 95% 53%;
+  --border: 220 14% 92%;
+  --input: 220 14% 92%;
+  --ring: 25 80% 55%;
+  --radius: 0.5rem;
+  --chart-1: 25 80% 55%;
   --chart-2: 168 76% 40%;
   --chart-3: 30 100% 85%;
   --chart-4: 0 84% 60%;
   --chart-5: 166 76% 92%;
-  --sidebar-background: 0 0% 100%;
-  --sidebar-foreground: 24 10% 10%;
-  --sidebar-primary: 25 95% 53%;
+  --sidebar-background: 220 40% 10%;
+  --sidebar-foreground: 220 10% 90%;
+  --sidebar-primary: 25 80% 55%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 30 100% 85%;
-  --sidebar-accent-foreground: 24 10% 10%;
-  --sidebar-border: 30 95% 72%;
-  --sidebar-ring: 25 95% 53%;
+  --sidebar-accent: 220 40% 15%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 220 40% 12%;
+  --sidebar-ring: 25 80% 55%;
 }
 
 .dark {
-  --background: 24 10% 10%;
-  --foreground: 39 100% 97%;
-  --card: 24 10% 14%;
-  --card-foreground: 39 100% 97%;
-  --popover: 24 10% 14%;
-  --popover-foreground: 39 100% 97%;
-  --primary: 25 95% 53%;
+  --background: 220 14% 96%;
+  --foreground: 220 40% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 40% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 40% 10%;
+  --primary: 25 80% 55%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 168 76% 40%;
-  --secondary-foreground: 0 0% 100%;
-  --muted: 24 10% 20%;
-  --muted-foreground: 30 20% 60%;
-  --accent: 168 40% 18%;
-  --accent-foreground: 166 76% 92%;
-  --destructive: 0 84% 60%;
+  --secondary: 220 14% 90%;
+  --secondary-foreground: 220 40% 10%;
+  --muted: 220 14% 92%;
+  --muted-foreground: 220 10% 45%;
+  --accent: 220 14% 90%;
+  --accent-foreground: 220 40% 10%;
+  --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 100%;
-  --border: 24 10% 20%;
-  --input: 24 10% 20%;
-  --ring: 25 95% 53%;
-  --chart-1: 25 95% 53%;
+  --border: 220 14% 92%;
+  --input: 220 14% 92%;
+  --ring: 25 80% 55%;
+  --chart-1: 25 80% 55%;
   --chart-2: 168 76% 40%;
   --chart-3: 30 40% 40%;
   --chart-4: 0 84% 60%;
   --chart-5: 166 40% 30%;
-  --sidebar-background: 24 10% 12%;
-  --sidebar-foreground: 39 100% 97%;
-  --sidebar-primary: 25 95% 53%;
+  --sidebar-background: 220 40% 10%;
+  --sidebar-foreground: 220 10% 90%;
+  --sidebar-primary: 25 80% 55%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 24 10% 20%;
-  --sidebar-accent-foreground: 39 100% 97%;
-  --sidebar-border: 24 10% 20%;
-  --sidebar-ring: 25 95% 53%;
+  --sidebar-accent: 220 40% 15%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 220 40% 12%;
+  --sidebar-ring: 25 80% 55%;
 }
 
 @theme inline {
@@ -121,4 +121,13 @@
     @apply bg-background text-foreground;
     font-family: Inter, system-ui, -apple-system, sans-serif;
   }
+}
+/* Elegant SaaS Refinements */
+.card, [data-sidebar="sidebar"] {
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+  background-color: hsl(0 0% 100%) !important;
+}
+table th, table td {
+  border-bottom: 1px solid hsl(var(--border)) !important;
 }
