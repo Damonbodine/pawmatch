@@ -51,8 +51,26 @@ export const createFromClerk = mutation({
     const existing = await ctx.db
       .query("users")
       .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
-      .unique();
+      .first();
     if (existing) return existing._id;
+
+    // Check if a user exists with the same email but different clerkId (e.g. from seed data)
+    if (identity.email) {
+      const byEmail = await ctx.db
+        .query("users")
+        .withIndex("by_email", (q) => q.eq("email", identity.email!))
+        .first();
+      if (byEmail) {
+        // Link existing user to this Clerk identity
+        await ctx.db.patch(byEmail._id, {
+          clerkId: identity.subject,
+          name: identity.name ?? byEmail.name,
+          updatedAt: Date.now(),
+          lastLoginAt: Date.now(),
+        });
+        return byEmail._id;
+      }
+    }
 
     return await ctx.db.insert("users", {
       clerkId: identity.subject,
@@ -163,6 +181,7 @@ export const update = mutation({
     });
   },
 });
+
 
 export const remove = mutation({
   args: { userId: v.id("users") },

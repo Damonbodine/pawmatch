@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { AiGenerateButton } from "@/components/ai-generate-button";
 
 interface ApplicationFormProps {
   animalId: Id<"animals">;
@@ -100,7 +101,15 @@ export function ApplicationForm({ animalId, applicantName, applicantEmail, appli
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="personalStatement" className="text-foreground">Why do you want to adopt this animal?</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="personalStatement" className="text-foreground">Why do you want to adopt this animal?</Label>
+            <AiGenerateButton
+              fieldName="personalStatement"
+              context={{ applicantName, housingType, hasYard, hasChildren, experienceLevel }}
+              onGenerated={setPersonalStatement}
+              disabled={loading}
+            />
+          </div>
           <Textarea id="personalStatement" value={personalStatement} onChange={(e) => setPersonalStatement(e.target.value)} required placeholder="Tell us why you'd be a great match..." rows={4} className="bg-background border-border" />
         </div>
       </div>

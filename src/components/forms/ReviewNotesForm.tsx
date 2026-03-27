@@ -7,6 +7,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { AiGenerateButton } from "@/components/ai-generate-button";
 
 interface ReviewNotesFormProps {
   applicationId: Id<"applications">;
@@ -61,7 +62,15 @@ export function ReviewNotesForm({ applicationId, onSuccess }: ReviewNotesFormPro
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="notes" className="text-foreground">Review Notes</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="notes" className="text-foreground">Review Notes</Label>
+          <AiGenerateButton
+            fieldName="reviewNotes"
+            context={{ applicationId }}
+            onGenerated={setNotes}
+            disabled={loading}
+          />
+        </div>
         <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add your review notes here... (required for rejection)" rows={4} className="bg-background border-border" />
       </div>
       <div className="flex gap-3">

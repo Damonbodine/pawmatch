@@ -6,11 +6,11 @@ export const seed = internalMutation({
     const now = Date.now();
 
     // ── Users ──
-    // Damon — primary admin (uses Google sign-in via damonbodine@gmail.com)
+    // Demo user — primary admin
     const damonUser = await ctx.db.insert("users", {
-      clerkId: "user_3BKO1mVZeYBph4mcp8lzDMKS7Tq",
-      name: "Damon Bodine",
-      email: "damonbodine@gmail.com",
+      clerkId: "user_3BV4YzajQ96nGS3hlBDld9VcLa8",
+      name: "Demo User",
+      email: "demo@factory512.dev",
       role: "Admin",
       bio: "Platform owner",
       isActive: true,

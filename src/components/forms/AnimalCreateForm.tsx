@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { AiGenerateButton } from "@/components/ai-generate-button";
 
 interface AnimalCreateFormProps {
   shelterId: Id<"shelters">;
@@ -26,6 +27,8 @@ export function AnimalCreateForm({ shelterId, onSuccess }: AnimalCreateFormProps
   const [gender, setGender] = useState<"Male" | "Female">("Male");
   const [size, setSize] = useState<"Small" | "Medium" | "Large">("Medium");
   const [description, setDescription] = useState("");
+  const [temperament, setTemperament] = useState("");
+  const [specialNeeds, setSpecialNeeds] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const [medicalStatus, setMedicalStatus] = useState<"Healthy" | "NeedsTreatment" | "SpecialNeeds">("Healthy");
   const [isSpayedNeutered, setIsSpayedNeutered] = useState(false);
@@ -44,6 +47,8 @@ export function AnimalCreateForm({ shelterId, onSuccess }: AnimalCreateFormProps
         gender,
         size,
         description,
+        temperament: temperament || undefined,
+        specialNeeds: specialNeeds || undefined,
         photoUrl: photoUrl || undefined,
         medicalStatus,
         isSpayedNeutered,
@@ -145,8 +150,40 @@ export function AnimalCreateForm({ shelterId, onSuccess }: AnimalCreateFormProps
         </div>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="description" className="text-foreground">Description</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="description" className="text-foreground">Description</Label>
+          <AiGenerateButton
+            fieldName="animalDescription"
+            context={{ name, species, breed, age, gender, size, medicalStatus, isSpayedNeutered, isVaccinated }}
+            onGenerated={setDescription}
+            disabled={loading}
+          />
+        </div>
         <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} required placeholder="Personality, background, and any special notes..." rows={4} className="bg-background border-border" />
+      </div>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="temperament" className="text-foreground">Temperament</Label>
+          <AiGenerateButton
+            fieldName="animalTemperament"
+            context={{ name, species, breed, age, gender, size }}
+            onGenerated={setTemperament}
+            disabled={loading}
+          />
+        </div>
+        <Textarea id="temperament" value={temperament} onChange={(e) => setTemperament(e.target.value)} placeholder="Energy level, sociability, training status..." rows={3} className="bg-background border-border" />
+      </div>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="specialNeeds" className="text-foreground">Special Needs</Label>
+          <AiGenerateButton
+            fieldName="animalSpecialNeeds"
+            context={{ name, species, breed, age, medicalStatus }}
+            onGenerated={setSpecialNeeds}
+            disabled={loading}
+          />
+        </div>
+        <Textarea id="specialNeeds" value={specialNeeds} onChange={(e) => setSpecialNeeds(e.target.value)} placeholder="Medical conditions, dietary needs, accommodations..." rows={3} className="bg-background border-border" />
       </div>
       <Button type="submit" disabled={loading} className="w-full">
         {loading ? "Creating..." : "Create Animal"}
