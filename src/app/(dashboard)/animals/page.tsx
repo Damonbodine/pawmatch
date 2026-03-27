@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useState } from "react";
 import { AnimalFilterBar, AnimalFilters } from "@/components/animals/AnimalFilterBar";
 import { AnimalCardGrid } from "@/components/animals/AnimalCardGrid";

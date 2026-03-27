@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { NotificationSettingsForm } from "@/components/forms/NotificationSettingsForm";
 
 export default function NotificationSettingsPage() {

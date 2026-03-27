@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/RoleGuard";
 import { ShelterCreateForm } from "@/components/forms/ShelterCreateForm";
