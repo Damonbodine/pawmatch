@@ -83,9 +83,11 @@ export function AnimalCardGrid({ filters }: AnimalCardGridProps) {
         <Card
           key={animal._id}
           className="overflow-hidden group hover:shadow-lg transition-shadow border-border"
-          data-demo={index === 0 ? "primary-animal-card" : undefined}
         >
-          <Link href={withPreservedDemoQuery(`/animals/${animal._id}`, searchParams)}>
+          <Link
+            href={withPreservedDemoQuery(`/animals/${animal._id}`, searchParams)}
+            data-demo={index === 0 ? "primary-animal-card" : undefined}
+          >
             <div className="relative h-48 bg-muted overflow-hidden">
               {animal.photoUrl ? (
                 <img
