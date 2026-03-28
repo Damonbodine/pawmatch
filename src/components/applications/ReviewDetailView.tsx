@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
+import { AdoptionMatchScorer } from "@/components/ai/AdoptionMatchScorer";
+import { FollowUpEmailGenerator } from "@/components/ai/FollowUpEmailGenerator";
 
 interface ReviewDetailViewProps {
   applicationId: Id<"applications">;
@@ -106,39 +108,94 @@ export function ReviewDetailView({ applicationId }: ReviewDetailViewProps) {
       </Card>
 
       {(application.status === "Submitted" || application.status === "UnderReview") && (
-        <Card>
-          <CardHeader><CardTitle>Review Decision</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            {actionError && (
-              <div className="p-3 bg-destructive/10 text-destructive rounded-md text-sm">{actionError}</div>
-            )}
-            <div className="space-y-2">
-              <Label htmlFor="reviewNotes">Review Notes / Rejection Reason</Label>
-              <Textarea
-                id="reviewNotes"
-                value={reviewNotes}
-                onChange={(e) => setReviewNotes(e.target.value)}
-                placeholder="Add notes about this application..."
-              />
-            </div>
-            <div className="flex gap-3">
-              <Button
-                onClick={handleApprove}
-                disabled={isProcessing}
-                className="bg-secondary hover:bg-secondary/90"
-              >
-                {isProcessing ? "Processing..." : "Approve"}
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={handleReject}
-                disabled={isProcessing}
-              >
-                {isProcessing ? "Processing..." : "Reject"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <>
+          <AdoptionMatchScorer
+            animalData={application.animal ? {
+              name: application.animal.name,
+              species: application.animal.species,
+              breed: application.animal.breed,
+              age: application.animal.age,
+              size: application.animal.size,
+              temperament: application.animal.temperament,
+              medicalStatus: application.animal.medicalStatus,
+              specialNeeds: application.animal.specialNeeds,
+              goodWithKids: application.animal.goodWithKids,
+              goodWithDogs: application.animal.goodWithDogs,
+              goodWithCats: application.animal.goodWithCats,
+            } : {}}
+            applicantData={{
+              housingType: application.housingType,
+              hasYard: application.hasYard,
+              yardFenced: application.yardFenced,
+              otherPets: application.otherPets,
+              householdMembers: application.householdMembers,
+              hasChildren: application.hasChildren,
+              childrenAges: application.childrenAges,
+              experienceLevel: application.experienceLevel,
+              personalStatement: application.personalStatement,
+            }}
+          />
+
+          <Card>
+            <CardHeader><CardTitle>Review Decision</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {actionError && (
+                <div className="p-3 bg-destructive/10 text-destructive rounded-md text-sm">{actionError}</div>
+              )}
+              <div className="space-y-2">
+                <Label htmlFor="reviewNotes">Review Notes / Rejection Reason</Label>
+                <Textarea
+                  id="reviewNotes"
+                  value={reviewNotes}
+                  onChange={(e) => setReviewNotes(e.target.value)}
+                  placeholder="Add notes about this application..."
+                />
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  onClick={handleApprove}
+                  disabled={isProcessing}
+                  className="bg-secondary hover:bg-secondary/90"
+                >
+                  {isProcessing ? "Processing..." : "Approve"}
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleReject}
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? "Processing..." : "Reject"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </>
+      )}
+
+      {application.status === "Approved" && (
+        <FollowUpEmailGenerator
+          animalData={application.animal ? {
+            name: application.animal.name,
+            species: application.animal.species,
+            breed: application.animal.breed,
+            age: application.animal.age,
+            temperament: application.animal.temperament,
+            medicalStatus: application.animal.medicalStatus,
+            specialNeeds: application.animal.specialNeeds,
+            goodWithKids: application.animal.goodWithKids,
+            goodWithDogs: application.animal.goodWithDogs,
+            goodWithCats: application.animal.goodWithCats,
+          } : {}}
+          applicantData={{
+            name: application.applicantName,
+            email: application.applicantEmail,
+            housingType: application.housingType,
+            hasYard: application.hasYard,
+            otherPets: application.otherPets,
+            hasChildren: application.hasChildren,
+            experienceLevel: application.experienceLevel,
+          }}
+        />
       )}
     </div>
   );

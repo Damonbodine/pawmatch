@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { AnimalBioWriter } from "@/components/ai/AnimalBioWriter";
+import { BehavioralAssessment } from "@/components/ai/BehavioralAssessment";
 
 interface AnimalDetailViewProps {
   animalId: Id<"animals">;
@@ -118,6 +120,41 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
           )}
         </div>
       )}
+
+      <AnimalBioWriter
+        animalData={{
+          name: animal.name,
+          species: animal.species,
+          breed: animal.breed,
+          age: animal.age,
+          gender: animal.gender,
+          size: animal.size,
+          temperament: animal.temperament,
+          description: animal.description,
+          medicalStatus: animal.medicalStatus,
+          specialNeeds: animal.specialNeeds,
+          goodWithKids: animal.goodWithKids,
+          goodWithDogs: animal.goodWithDogs,
+          goodWithCats: animal.goodWithCats,
+        }}
+      />
+
+      <BehavioralAssessment
+        animalData={{
+          name: animal.name,
+          species: animal.species,
+          breed: animal.breed,
+          age: animal.age,
+          gender: animal.gender,
+          size: animal.size,
+          temperament: animal.temperament,
+          description: animal.description,
+          goodWithKids: animal.goodWithKids,
+          goodWithDogs: animal.goodWithDogs,
+          goodWithCats: animal.goodWithCats,
+          specialNeeds: animal.specialNeeds,
+        }}
+      />
     </div>
   );
 }
