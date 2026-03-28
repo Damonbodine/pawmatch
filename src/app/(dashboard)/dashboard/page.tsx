@@ -2,17 +2,21 @@
 
 export const dynamic = "force-dynamic";
 
+import { Suspense } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { DashboardStatCards } from "@/components/dashboard/DashboardStatCards";
+import { DemoModeStartButton } from "@/components/demo-mode";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PawPrint, FileText, Building2 } from "lucide-react";
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
+import { withPreservedDemoQuery } from "@/lib/demo";
 
-export default function DashboardPage() {
+function DashboardPageContent() {
   const currentUser = useQuery(api.users.getCurrentUser);
+  const searchParams = useSearchParams();
 
   // Loading state
   if (currentUser === undefined) {
@@ -37,9 +41,16 @@ export default function DashboardPage() {
   // Admin dashboard
   if (currentUser.role === "Admin") {
     return (
-      <div className="space-y-6">
-        <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-        <DashboardStatCards />
+      <div className="space-y-6" data-demo="dashboard-page">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+          </div>
+          <DemoModeStartButton />
+        </div>
+        <div data-demo="dashboard-overview">
+          <DashboardStatCards />
+        </div>
       </div>
     );
   }
@@ -47,12 +58,17 @@ export default function DashboardPage() {
   // Shelter Staff dashboard
   if (currentUser.role === "ShelterStaff") {
     return (
-      <div className="space-y-6">
-        <h1 className="text-3xl font-bold tracking-tight">Staff Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back, {currentUser.name}!</p>
+      <div className="space-y-6" data-demo="dashboard-overview">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Staff Dashboard</h1>
+            <p className="text-muted-foreground">Welcome back, {currentUser.name}!</p>
+          </div>
+          <DemoModeStartButton />
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Link href="/review-applications">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+          <Link href={withPreservedDemoQuery("/review-applications", searchParams)}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer" data-demo="pending-applications">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -66,7 +82,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </Link>
-          <Link href="/animals">
+          <Link href={withPreservedDemoQuery("/animals", searchParams)}>
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
@@ -81,7 +97,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </Link>
-          <Link href="/shelters">
+          <Link href={withPreservedDemoQuery("/shelters", searchParams)}>
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
@@ -104,10 +120,15 @@ export default function DashboardPage() {
   // Adopter dashboard (default)
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Welcome, {currentUser.name}!</h1>
-      <p className="text-muted-foreground">Find your perfect companion today.</p>
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Welcome, {currentUser.name}!</h1>
+          <p className="text-muted-foreground">Find your perfect companion today.</p>
+        </div>
+        <DemoModeStartButton />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Link href="/animals">
+        <Link href={withPreservedDemoQuery("/animals", searchParams)}>
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
@@ -122,7 +143,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </Link>
-        <Link href="/my-applications">
+        <Link href={withPreservedDemoQuery("/my-applications", searchParams)}>
           <Card className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
@@ -139,5 +160,13 @@ export default function DashboardPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="h-24" />}>
+      <DashboardPageContent />
+    </Suspense>
   );
 }

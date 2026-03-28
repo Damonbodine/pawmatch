@@ -4,7 +4,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -19,6 +19,7 @@ import { Home, PawPrint, FileText, Heart, Bell, Building2, Settings, Users, LogO
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useClerk } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import { withPreservedDemoQuery } from "@/lib/demo";
 
 interface NavItem {
   label: string;
@@ -33,6 +34,7 @@ export function NavSidebar() {
   const { signOut } = useClerk();
   const currentUser = useQuery(api.users.getCurrentUser);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const role = currentUser?.role ?? "adopter";
 
@@ -64,7 +66,10 @@ export function NavSidebar() {
         <SidebarMenu>
           {visibleItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton render={<Link href={item.href} />} isActive={pathname === item.href || pathname.startsWith(item.href + "/")}>
+              <SidebarMenuButton
+                render={<Link href={withPreservedDemoQuery(item.href, searchParams)} />}
+                isActive={pathname === item.href || pathname.startsWith(item.href + "/")}
+              >
                 <item.icon className="h-5 w-5" />
                 <span className="flex-1">{item.label}</span>
                 {item.badgeCount !== undefined && item.badgeCount > 0 && (

@@ -91,6 +91,10 @@
 /* ─── Status Badge Utilities ───────────────────────────── */
 
 @layer components {
+  [data-demo-active="true"] {
+    @apply ring-2 ring-primary ring-offset-4 ring-offset-background transition-all;
+  }
+
   .badge-success {
     @apply bg-success/15 text-success border-success/25;
   }

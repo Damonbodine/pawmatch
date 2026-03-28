@@ -10,6 +10,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { AnimalBioWriter } from "@/components/ai/AnimalBioWriter";
 import { BehavioralAssessment } from "@/components/ai/BehavioralAssessment";
+import { useSearchParams } from "next/navigation";
+import { withPreservedDemoQuery } from "@/lib/demo";
 
 interface AnimalDetailViewProps {
   animalId: Id<"animals">;
@@ -17,6 +19,7 @@ interface AnimalDetailViewProps {
 
 export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
   const animal = useQuery(api.animals.getById, { animalId });
+  const searchParams = useSearchParams();
 
   if (animal === undefined) {
     return (
@@ -43,7 +46,7 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-demo="animal-detail">
       <div className="relative h-64 md:h-96 bg-muted rounded-lg overflow-hidden">
         {animal.photoUrl ? (
           <img
@@ -116,7 +119,12 @@ export function AnimalDetailView({ animalId }: AnimalDetailViewProps) {
             <p className="text-2xl font-bold text-primary">${animal.adoptionFee}</p>
           </div>
           {animal.status === "Available" && (
-            <Link href={`/applications/new?animalId=${animal._id}`} className={buttonVariants({ size: "lg" })}>Apply to Adopt</Link>
+            <Link
+              href={withPreservedDemoQuery(`/applications/new?animalId=${animal._id}`, searchParams)}
+              className={buttonVariants({ size: "lg" })}
+            >
+              Apply to Adopt
+            </Link>
           )}
         </div>
       )}

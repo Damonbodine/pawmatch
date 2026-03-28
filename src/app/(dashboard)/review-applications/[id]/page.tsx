@@ -12,7 +12,7 @@ export default function ReviewApplicationDetailPage({ params }: { params: Promis
 
   return (
     <RoleGuard allowedRoles={["ShelterStaff", "Admin"]}>
-      <div className="space-y-6">
+      <div className="space-y-6" data-demo="review-detail">
         <h1 className="text-3xl font-bold tracking-tight">Review Application</h1>
         <ReviewDetailView applicationId={id as Id<"applications">} />
       </div>

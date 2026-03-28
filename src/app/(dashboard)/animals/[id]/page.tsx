@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import { use } from "react";
+import { Suspense, use } from "react";
 import { AnimalDetailView } from "@/components/animals/AnimalDetailView";
 import { Id } from "@/convex/_generated/dataModel";
 
@@ -11,7 +11,9 @@ export default function AnimalDetailPage({ params }: { params: Promise<{ id: str
 
   return (
     <div className="space-y-6">
-      <AnimalDetailView animalId={id as Id<"animals">} />
+      <Suspense fallback={<div className="h-64 rounded-xl border border-border bg-card/40" />}>
+        <AnimalDetailView animalId={id as Id<"animals">} />
+      </Suspense>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
+import { Suspense } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,6 +11,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { withPreservedDemoQuery } from "@/lib/demo";
 
 const statusColors: Record<string, string> = {
   Submitted: "bg-primary text-primary-foreground",
@@ -19,8 +22,9 @@ const statusColors: Record<string, string> = {
   Withdrawn: "bg-muted text-muted-foreground",
 };
 
-export default function ReviewApplicationsPage() {
+function ReviewApplicationsPageContent() {
   const currentUser = useQuery(api.users.getCurrentUser);
+  const searchParams = useSearchParams();
   const staffAssignments = useQuery(
     api.staffAssignments.listByUser,
     currentUser && currentUser.role === "ShelterStaff" ? { userId: currentUser._id } : "skip"
@@ -86,7 +90,7 @@ export default function ReviewApplicationsPage() {
       ) : applications.length === 0 ? (
         <div className="p-8 text-center text-muted-foreground">No pending applications to review.</div>
       ) : (
-        <Table>
+        <Table data-demo="review-applications-table">
           <TableHeader>
             <TableRow>
               <TableHead>Animal</TableHead>
@@ -97,7 +101,7 @@ export default function ReviewApplicationsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {applications.map((app: any) => (
+            {applications.map((app: any, index: number) => (
               <TableRow key={app._id}>
                 <TableCell className="font-medium text-foreground">
                   {app.animal?.name ?? "Unknown"}
@@ -113,8 +117,9 @@ export default function ReviewApplicationsPage() {
                 </TableCell>
                 <TableCell className="text-right">
                   <Link
-                    href={`/review-applications/${app._id}`}
+                    href={withPreservedDemoQuery(`/review-applications/${app._id}`, searchParams)}
                     className={buttonVariants({ variant: "ghost", size: "sm" })}
+                    data-demo={index === 0 ? "primary-review-link" : undefined}
                   >
                     Review
                   </Link>
@@ -125,5 +130,13 @@ export default function ReviewApplicationsPage() {
         </Table>
       )}
     </div>
+  );
+}
+
+export default function ReviewApplicationsPage() {
+  return (
+    <Suspense fallback={<div className="h-24" />}>
+      <ReviewApplicationsPageContent />
+    </Suspense>
   );
 }

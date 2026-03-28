@@ -10,6 +10,8 @@ import { Heart } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { withPreservedDemoQuery } from "@/lib/demo";
 
 export interface AnimalFilters {
   species?: "Dog" | "Cat" | "Rabbit" | "Bird" | "Other";
@@ -34,6 +36,7 @@ export function AnimalCardGrid({ filters }: AnimalCardGridProps) {
   const animals = useQuery(api.animals.list, filters ?? {});
   const toggleFavorite = useMutation(api.favoriteAnimals.toggle);
   const [togglingIds, setTogglingIds] = useState<Set<string>>(new Set());
+  const searchParams = useSearchParams();
 
   const handleToggleFavorite = async (animalId: Id<"animals">) => {
     setTogglingIds((prev) => new Set(prev).add(animalId));
@@ -76,9 +79,13 @@ export function AnimalCardGrid({ filters }: AnimalCardGridProps) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {animals.map((animal: any) => (
-        <Card key={animal._id} className="overflow-hidden group hover:shadow-lg transition-shadow border-border">
-          <Link href={`/animals/${animal._id}`}>
+      {animals.map((animal: any, index: number) => (
+        <Card
+          key={animal._id}
+          className="overflow-hidden group hover:shadow-lg transition-shadow border-border"
+          data-demo={index === 0 ? "primary-animal-card" : undefined}
+        >
+          <Link href={withPreservedDemoQuery(`/animals/${animal._id}`, searchParams)}>
             <div className="relative h-48 bg-muted overflow-hidden">
               {animal.photoUrl ? (
                 <img
