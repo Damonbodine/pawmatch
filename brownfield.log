@@ -1,0 +1,16 @@
+Run completed successfully. **25/25 steps completed, 0 failed.**
+
+## Summary
+
+Added 4 AI-powered features to PawMatch v3:
+
+| Feature | Location | Description |
+|---------|----------|-------------|
+| **Adoption Match Scorer** | Review application page | Analyzes adopter-animal compatibility, returns 1-100 score with factor breakdown |
+| **Animal Bio Writer** | Animal detail page | Generates adoption listings with 3 tone options (heartwarming/playful/dignified) |
+| **Behavioral Assessment** | Animal detail page | Creates standardized profile: sociability, energy, training needs, ideal home |
+| **Follow-Up Email Generator** | Approved application page | Produces personalized 2-week check-in email |
+
+**Files created:** 4 components in `src/components/ai/`
+**Files modified:** `convex/ai.ts` (4 new actions + shared helper), `AnimalDetailView.tsx`, `ReviewDetailView.tsx`
+**Build:** Passing | **Lint:** No new issues introduced
